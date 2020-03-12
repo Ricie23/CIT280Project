@@ -24,14 +24,7 @@ namespace CIT280App.Controllers
         {
             return View();
         }
-        public ActionResult AllUsers()
-        {
-            var employers = db.Employers.ToList();
-            var students = db.Students.ToList();
-            var admins = db.Admins.ToList();
-            var users = new List<UserModel>(employers).Concat(students).Concat(admins).ToList();
-            return View(users);
-        }
+       
         // GET: Admin/Details/5
         public ActionResult Details(int? id)
         {

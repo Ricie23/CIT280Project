@@ -384,7 +384,6 @@
     <Content Include="Views\EmployerModels\Details.cshtml" />
     <Content Include="Views\EmployerModels\Edit.cshtml" />
     <Content Include="Views\EmployerModels\Index.cshtml" />
-    <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Admin\Create.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
