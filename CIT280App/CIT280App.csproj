@@ -175,13 +175,10 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\EmployerController.cs" />
     <Compile Include="Controllers\EmployerModelController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\JobsController.cs" />
     <Compile Include="Controllers\JobsModelController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\StudentModelController.cs" />
     <Compile Include="DAL\XyphosContext.cs" />
     <Compile Include="DAL\XyphosInitializer.cs" />
@@ -357,13 +354,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Employer\EmployerDashboard.cshtml" />
     <Content Include="Views\Admin\AdminDashboard.cshtml" />
-    <Content Include="Views\Student\StudentDashboard.cshtml" />
-    <Content Include="Views\Student\StudentList.cshtml" />
-    <Content Include="Views\Employer\EmployerList.cshtml" />
-    <Content Include="Views\Student\StudentProfile.cshtml" />
-    <Content Include="Views\Employer\EmployerProfile.cshtml" />
     <Content Include="Views\StudentModel\Create.cshtml" />
     <Content Include="Views\StudentModel\Delete.cshtml" />
     <Content Include="Views\StudentModel\Details.cshtml" />
@@ -379,20 +370,17 @@
     <Content Include="Views\JobsModel\Details.cshtml" />
     <Content Include="Views\JobsModel\Edit.cshtml" />
     <Content Include="Views\JobsModel\Index.cshtml" />
-    <Content Include="Views\EmployerModels\Create.cshtml" />
-    <Content Include="Views\EmployerModels\Delete.cshtml" />
-    <Content Include="Views\EmployerModels\Details.cshtml" />
-    <Content Include="Views\EmployerModels\Edit.cshtml" />
-    <Content Include="Views\EmployerModels\Index.cshtml" />
+    <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Admin\Create.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
     <Content Include="Views\Admin\Delete.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\AllJobs.cshtml" />
+    <Content Include="Views\EmployerModel\Profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Jobs\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

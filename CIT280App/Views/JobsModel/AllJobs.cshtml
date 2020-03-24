@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<CIT280App.Models.JobsModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "AllJobs";
 }
 
-<h2>Index</h2>
+<h2>Jobs List</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,7 +12,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.IsComplete)
+            @Html.DisplayNameFor(model => model.User.FirstName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Name)
@@ -21,25 +21,22 @@
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.RequiredSkills)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhotoPath)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Pay)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.City)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.State)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EmployerId)
+            @Html.DisplayNameFor(model => model.RequiredSkills)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StudentId)
+            @Html.DisplayNameFor(model => model.Photo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Pay)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsComplete)
         </th>
         <th></th>
     </tr>
@@ -47,7 +44,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.IsComplete)
+            @Html.DisplayFor(modelItem => item.User.FirstName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
@@ -56,25 +53,22 @@
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.RequiredSkills)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PhotoPath)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Pay)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.City)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.State)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.EmployerId)
+            @Html.DisplayFor(modelItem => item.RequiredSkills)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.StudentId)
+            @Html.DisplayFor(modelItem => item.Photo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Pay)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsComplete)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

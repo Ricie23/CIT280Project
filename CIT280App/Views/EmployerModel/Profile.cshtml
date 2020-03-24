@@ -1,15 +1,15 @@
 ﻿@model CIT280App.Models.EmployerModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Profile";
 }
 
-<h2>Details</h2>
+<h2 class="text-center jumbotron bg-info text-white">Profile</h2>
 
 <div>
-    <h4>EmployerModel</h4>
+    <h4 class="text-center">EmployerModel</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal text-center">
         <dt>
             @Html.DisplayNameFor(model => model.Role)
         </dt>
@@ -109,6 +109,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |*@
+    @Html.ActionLink("Back to DashBoard", "EmplyerDashboard")
 </p>

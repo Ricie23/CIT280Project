@@ -4,13 +4,13 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2 class="text-center jumbotron bg-info text-white">Delete</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3 class="text-center">Are you sure you want to delete this?</h3>
 <div>
-    <h4>EmployerModel</h4>
+    <h4 class="text-center">EmployerModel</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal text-center">
         <dt>
             @Html.DisplayNameFor(model => model.BuisnessName)
         </dt>
@@ -27,13 +27,13 @@
             @Html.DisplayFor(model => model.BuisnessType)
         </dd>
 
-        <dt>
+        @*<dt>
             @Html.DisplayNameFor(model => model.Role)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Role)
-        </dd>
+        </dd>*@
 
         <dt>
             @Html.DisplayNameFor(model => model.FirstName)
@@ -114,7 +114,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to Dashboard", "AdminDashboard")
         </div>
     }
 </div>

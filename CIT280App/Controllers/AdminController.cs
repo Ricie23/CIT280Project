@@ -11,7 +11,9 @@ using CIT280App.Models;
 
 namespace CIT280App.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
+    
     {
         private XyphosContext db = new XyphosContext();
 
@@ -24,7 +26,21 @@ namespace CIT280App.Controllers
         {
             return View();
         }
-       
+        public ActionResult AllUsers()
+        {
+            var employers = db.Employers.ToList();
+            var students = db.Students.ToList();
+            var admins = db.Admins.ToList();
+            var users = new List<UserModel>(employers).Concat(students).Concat(admins).ToList();
+            return View(users);
+        }
+
+        public ActionResult AllJobs() 
+        {
+            var jobs = db.Jobs.Include(j => j.User);
+            return View(jobs.ToList());
+        }
+        
         // GET: Admin/Details/5
         public ActionResult Details(int? id)
         {
@@ -128,5 +144,7 @@ namespace CIT280App.Controllers
             }
             base.Dispose(disposing);
         }
+
+        
     }
 }

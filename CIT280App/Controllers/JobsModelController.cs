@@ -11,6 +11,7 @@ using CIT280App.Models;
 
 namespace CIT280App.Controllers
 {
+    [Authorize]
     public class JobsModelController : Controller
     {
         private XyphosContext db = new XyphosContext();
@@ -21,7 +22,10 @@ namespace CIT280App.Controllers
             var jobs = db.Jobs.Include(j => j.User);
             return View(jobs.ToList());
         }
-
+        public ActionResult Map()
+        {
+            return View();
+        }
         // GET: JobsModel/Details/5
         public ActionResult Details(int? id)
         {

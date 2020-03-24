@@ -11,6 +11,7 @@ using CIT280App.Models;
 
 namespace CIT280App.Controllers
 {
+    [Authorize]
     public class EmployerModelController : Controller
     {
         private XyphosContext db = new XyphosContext();
@@ -21,12 +22,19 @@ namespace CIT280App.Controllers
             return View(db.Employers.ToList());
         }
 
+        public ActionResult EmployerDashboard() 
+        {
+            return View();
+        }
+
         // GET: EmployerModels/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //CHANGE BACK BEFORE MASTER
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                id = 4;
             }
             EmployerModel employerModel = db.Employers.Find(id);
             if (employerModel == null)

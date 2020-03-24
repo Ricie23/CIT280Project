@@ -4,14 +4,14 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2 class="text-center jumbotron bg-info text-white">Students</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @*@Html.ActionLink("Create New", "Create")*@
 </p>
 <table class="table">
     <tr>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.Role)
         </th>
         <th>
@@ -49,15 +49,34 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.YearInSchool)
+        </th>*@
+
+        <th>
+            @Html.DisplayName("First Name")
+        </th>
+        <th>
+            @Html.DisplayName("Last Name")
+        </th>
+        <th>
+            @Html.DisplayName("College")
+        </th>
+        <th>
+            @Html.DisplayName("Major")
+        </th>
+        <th>
+            @Html.DisplayName("City")
+        </th>
+        <th>
+            @Html.DisplayName("State")
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.Role)
-        </td>
+        </td>*@
         <td>
             @Html.DisplayFor(modelItem => item.FirstName)
         </td>
@@ -65,12 +84,18 @@
             @Html.DisplayFor(modelItem => item.LastName)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Major)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.School)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.City)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.State)
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
@@ -85,19 +110,14 @@
         <td>
             @Html.DisplayFor(modelItem => item.Reviews)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Major)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.School)
-        </td>
+        
         <td>
             @Html.DisplayFor(modelItem => item.YearInSchool)
-        </td>
+        </td>*@
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @*@Html.ActionLink("Edit", "Edit", new { id=item.ID }) |*@
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) @*|*@
+            @*@Html.ActionLink("Delete", "Delete", new { id=item.ID })*@
         </td>
     </tr>
 }

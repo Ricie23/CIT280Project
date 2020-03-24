@@ -11,6 +11,7 @@ using CIT280App.Models;
 
 namespace CIT280App.Controllers
 {
+    [Authorize]
     public class StudentModelController : Controller
     {
         private XyphosContext db = new XyphosContext();
@@ -21,12 +22,19 @@ namespace CIT280App.Controllers
             return View(db.Students.ToList());
         }
 
+        public ActionResult StudentDashboard()
+        {
+            return View();
+        }
+
         // GET: StudentModel/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //CHANGE BACK BEFORE PUSH TO MASTER
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                id = 1;
             }
             StudentModel studentModel = db.Students.Find(id);
             if (studentModel == null)
