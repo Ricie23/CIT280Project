@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CIT280App.DAL;
 using CIT280App.Models;
+using PagedList;
 
 namespace CIT280App.Controllers
 {
@@ -17,10 +18,58 @@ namespace CIT280App.Controllers
         private XyphosContext db = new XyphosContext();
 
         // GET: EmployerModels
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.Employers.ToList());
+            ViewBag.EmpNameSortParm = String.IsNullOrEmpty(sortOrder) ? "empname_desc" : "";
+            ViewBag.EmpTypeSortParm = sortOrder == "emptype" ? "emptype_desc" : "emptype";
+            ViewBag.CitySortParm = sortOrder == "city" ? "city_desc" : "city";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
+
+            var employers = from e in db.Employers
+                           select e;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                employers = employers.Where(e => e.BuisnessName.Contains(searchString)
+                                            || e.BuisnessType.Contains(searchString)
+                                            || e.City.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "city_desc":
+                    employers = employers.OrderByDescending(e => e.City);
+                    break;
+                case "city":
+                    employers = employers.OrderBy(e => e.City);
+                    break;
+                case "empname_desc":
+                    employers = employers.OrderByDescending(e => e.BuisnessName);
+                    break;
+                case "emptype":
+                    employers = employers.OrderBy(e => e.BuisnessType);
+                    break;
+                case "emptype_desc":
+                    employers = employers.OrderByDescending(e => e.BuisnessType);
+                    break;
+                default:
+                    employers = employers.OrderBy(e => e.BuisnessName);
+                    break; ;
+            }
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(employers.ToPagedList(pageNumber, pageSize));
         }
+        //public ActionResult Index()
+        //{
+        //    return View(db.Employers.ToList());
+        //}
 
         public ActionResult EmployerDashboard() 
         {
