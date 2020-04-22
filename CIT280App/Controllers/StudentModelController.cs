@@ -72,6 +72,11 @@ namespace CIT280App.Controllers
             return View();
         }
 
+        public ActionResult Info()
+        {
+            return View();
+        }
+
         // GET: StudentModel/Details/5
         public ActionResult Details(int? id)
         {

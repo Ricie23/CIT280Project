@@ -395,6 +395,8 @@
     <Content Include="Views\StudentModel\StudentsDashboard.cshtml" />
     <Content Include="Views\StudentModel\Profile.cshtml" />
     <Content Include="Views\JobsModel\Map.cshtml" />
+    <Content Include="Views\EmployerModel\Info.cshtml" />
+    <Content Include="Views\StudentModel\Info.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

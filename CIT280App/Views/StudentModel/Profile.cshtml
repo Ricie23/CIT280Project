@@ -5,7 +5,7 @@
 
     string EmailTo = Model.Email;
 
-    string FullName = Model.FirstName + Model.LastName;
+    string FullName = Model.FirstName + " " + Model.LastName;
 }
 <style>
 
@@ -135,5 +135,5 @@
     <a class="btn btn-lg btn-primary text-left" href="mailto:@EmailTo">Contact Student</a>
 <p class="btn btn-lg btn-primary text-left">@Html.ActionLink("Edit", "Edit", new { id = Model.ID }) </p>
 <br />
-<p class="btn btn-lg btn-primary text-left">@Html.ActionLink("Back to Dashboard", "StudentDashboard")</p>
+<p class="btn btn-lg btn-primary text-left">@Html.ActionLink("Back to Dashboard", "StudentsDashboard")</p>
 </p>
