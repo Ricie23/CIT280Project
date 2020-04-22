@@ -212,6 +212,7 @@
     <Content Include="Content\images\Figure1_1.png" />
     <Content Include="Content\images\Figure1_2.png" />
     <Content Include="Content\images\Figure1_3.png" />
+    <Content Include="Content\images\Figure1_4.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
