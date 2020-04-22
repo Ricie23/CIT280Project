@@ -397,6 +397,7 @@
     <Content Include="Views\JobsModel\Map.cshtml" />
     <Content Include="Views\EmployerModel\Info.cshtml" />
     <Content Include="Views\StudentModel\Info.cshtml" />
+    <Content Include="Views\JobsModel\Profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

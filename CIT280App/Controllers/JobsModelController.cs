@@ -84,7 +84,7 @@ namespace CIT280App.Controllers
                 //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 id = 6;              
             }
-            UserModel Emp = db.Employers.Find(id);
+            EmployerModel Emp = db.Employers.Find(id);
             ViewData["EmpID"] = Emp.ID;
             var jobs = db.Jobs.Include(j => j.User);
 
@@ -97,6 +97,20 @@ namespace CIT280App.Controllers
         }
         // GET: JobsModel/Details/5
         public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            JobsModel jobsModel = db.Jobs.Find(id);
+            if (jobsModel == null)
+            {
+                return HttpNotFound();
+            }
+            return View(jobsModel);
+        }
+
+        public ActionResult Profile(int? id)
         {
             if (id == null)
             {

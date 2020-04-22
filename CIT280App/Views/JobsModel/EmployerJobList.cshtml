@@ -3,10 +3,12 @@
 @{
     ViewBag.Title = "EmployerJobList";
 
+    string Header = Html.DisplayNameFor(model => model.Employer.FirstName) + " " + Html.DisplayNameFor(model => model.Employer.LastName) + "s Job List";
+
     int EmpID = Convert.ToInt32(ViewData["EmpID"].ToString());
 }
 
-<h2>EmployerJobList</h2>
+<h2 class="text-center jumbotron bg-info text-white">Employer Job List</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create", new { id = EmpID })
@@ -14,29 +16,29 @@
 <table class="table">
     <tr>
         @*<th>
-            @Html.DisplayNameFor(model => model.UserID)
-        </th>*@
+                @Html.DisplayNameFor(model => model.UserID)
+            </th>*@
         <th>
             @Html.DisplayNameFor(model => model.User.FirstName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.Description)
-        </th>
+        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.City)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.State)
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.RequiredSkills)
-        </th>
-        <th>
+        </th>*@
+        @*<th>
             @Html.DisplayNameFor(model => model.Photo)
-        </th>
+        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Pay)
         </th>
@@ -52,29 +54,29 @@
         {
             <tr>
                 @*<td>
-                    @Html.DisplayFor(modelItem => item.UserID)
-                </td>*@
+                        @Html.DisplayFor(modelItem => item.UserID)
+                    </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.User.FirstName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Description)
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.City)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.State)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.RequiredSkills)
-                </td>
-                <td>
+                </td>*@
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Photo)
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.Pay)
                 </td>
@@ -83,7 +85,7 @@
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Profile", new { id = item.ID }) |
                     @Html.ActionLink("Delete", "Delete", new { id = item.ID })
                 </td>
             </tr>

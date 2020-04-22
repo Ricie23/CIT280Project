@@ -1,10 +1,7 @@
 ﻿@model CIT280App.Models.JobsModel
 
 @{
-    ViewBag.Title = "Details";
-
-    string EmailTo = Model.User.Email;
-
+    ViewBag.Title = "Profile";
     string JobName = Model.Name;
 }
 <style>
@@ -19,7 +16,7 @@
             text-decoration: none;
         }
 </style>
-<h2 class="text-center jumbotron bg-info text-white">Job Details</h2>
+<h2 class="text-center jumbotron bg-info text-white">Job Profile</h2>
 
 <div>
     <h4 class="text-center">@JobName</h4>
@@ -100,8 +97,7 @@
     </dl>
 </div>
 <p>
-    <a class="btn btn-lg btn-primary text-left" href="mailto:@EmailTo">Contact Employer</a>
 
-    @*@Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |*@
-<p class="btn btn-lg btn-primary text-left">@Html.ActionLink("Back to List", "Index")</p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) 
+<p class="btn btn-lg btn-primary text-left">@Html.ActionLink("Back to Dashboard", "EmployersDashboard", "EmployerModel")</p>
 </p>
