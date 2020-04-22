@@ -1,0 +1,169 @@
+﻿
+@{
+    ViewBag.Title = "Document";
+}
+    <div class="container">
+        <h2>What Is Xyphos?</h2>
+        <p class="lead">
+            Xyphos is made for students to help find small jobs that utilize and grow their unique field of study and to obtain real world skills.
+            Xyphos allows Employers to post quick contracted jobs that students can do to build work experience and sometimes for pay too. 
+        </p>
+    </div>
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header bg-primary" id="registerHead">
+                <h5 class="mb-0">
+
+                    <button class="btn" style="color:white; text-decoration:none; font-weight:bold;"
+                            data-toggle="collapse" data-target="#register" aria-expanded="false" aria-controls="register">
+                        How to Register
+                    </button>
+                </h5>
+            </div>
+            <div id="register" class="collapse show bg-dark text-white" aria-labelledby="registerHead" data-parent="#accordion">
+                <div class="card-body">
+                    <h2> How to Register</h2>
+                    <p>
+                        Xyphos is simple for both students and employers. the first step is to create a free account.
+                        simply click the register button on the menu or by clicking @Html.ActionLink("here", "Register", "Account").
+                    </p>
+
+                    <p>
+                        once your email and password are entered, you will be redirected to choose a student or employer account (see Figure 1.1)
+                    </p>
+
+                    <h4><strong>Register as Student</strong></h4>
+                    <p>
+                        If you are a student looking for work to gain experience, choose this option
+                    </p>
+
+                    <h4><strong>Register as Employer</strong></h4>
+                    <p>
+                        If you are an employer looking to hire someone for work this is the option to choose.
+                    </p>
+                    <p></p>
+                    <br />
+                    <br />
+
+                    <img src="~/Content/images/Figure1_1.png" alt="Figure 1.1 screenshot of user dashboard" width="60%" />
+                    <p>Figure 1.1 - User Dashboard</p>
+
+                    <p>
+                        once your account type is chosen, you will be redirected again to create your profile.
+                        once your profile is filled out, hit the create button. Then head back to the home page by clicking the Xyphos button on the menu.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header bg-primary" id="StudentDashHead">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" style="color:white; text-decoration:none; font-weight:bold;" 
+                            data-toggle="collapse" data-target="#studentDash" aria-expanded="false" aria-controls="studentDash">
+                        For Students
+                    </button>
+                </h5>
+            </div>
+            <div id="studentDash" class="collapse show bg-dark text-white" aria-labelledby="StudentDashHead" data-parent="#accordion">
+                <div class="card-body">
+                    <h2>Student Profiles</h2>
+                    <p>for students, there are a few options they can choose from.</p>
+                    <h3>Option 1- Student Dashboard</h3>
+                    <p>From the homepage, click on the student dashboard link on the bottom left.</p>
+                    <p> this dashboard allows for two options: Jobs List and Profile (see figure 1.2) </p>
+                    <br />
+                    <br />
+                    <img src="~/Content/images/Figure1_2.png" alt="Figure 1.2 - Student Dashboard" width="60%" />
+                    <p>Figure 1.2 - Student Dashboard</p>
+
+                    <h4><strong>Profile</strong></h4>
+                    <p>the profile button leads to the student profile where the student can view edit or delete information. </p>
+                    <br />
+
+                    <h4><strong>Jobs List</strong></h4>
+                    <p>the Jobs List button will take the student to the Jobs Page</p>
+                    <br />
+
+                    <h3>Option 2 - Jobs Page</h3>
+                    <p>The jobs page is accesible through the student dashboard, and by clicking the Jobs link on the menu. </p>
+                    <p>
+                        the jobs page lists all available jobs that are currently posted by employers.
+                        students can browse through the job listings or search for a job or employer.
+                    </p>
+                    <p>once the student finds a selected job, click on the details button to the right to see the full description of the job.</p>
+                    <p>
+                        at the bottom of the detailed job page, there is an option to either go back to the full list, or contact the employer.
+                        clicking the contact employer button will prompt the default email server, filling in the employer's email address to send an email.
+                    </p>
+                    <p>NOTE: It is up to the student to type an email fully including the subject line. at this point, there are no defualt email messages</p>
+                    <br />
+                    <h3>Option 3 - Employers Page</h3>
+                    <p>the employer page is accesible by clicking the Employer link on the menu.</p>
+                    <p>
+                        the employer page lists all available employers that are registered to the sight.
+                        Students can either browse, search, or sort by location or name the employers.
+                    </p>
+                    <p>Once the student has found an employer, click the details button to the right of their information to see the employer's full profile.</p>
+                    <p>
+                        At the bottom of the profile, there is an option to either return to the employer page or contact the employer directly.
+                        the contact button works the same as the job page. it simply prompts the computer's default mail server with the employer's email address filled in.
+                    </p>
+                    <br />
+                    <h4>Option 4 - Map</h4>
+                    <p>to search for a job or employer by location, simply click the User Map link on the menu.</p>
+                    <p>this shows all locations available for employers and their jobs.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-primary" id="EmployerDashHead">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" style="color:white; text-decoration:none; font-weight:bold;" data-toggle="collapse" data-target="#employerDash" aria-expanded="false" aria-controls="employerDash">
+                        For Employers
+                    </button>
+                </h5>
+            </div>
+            <div id="employerDash" class="collapse show bg-dark text-white" aria-labelledby="EmployerDashHead" data-parent="#accordion">
+                <div class="card-body">
+                    <h2>Employer Profiles</h2>
+                    <p>For employers, there are a few options to choose from.</p>
+                    <h4>Opiton 1 - Employer Dashboard</h4>
+                    <p>From the homepage click on the Employer Dashboard button.</p>
+                    <p>This dashboard allows for to options: View the jobs listed by employer, or profile. (See Figure 1.3)</p>
+                    <br /> 
+                    <br />
+                    <img src="~/Content/images/Figure1_3.png" alt="Figure 1.3 Employer Dashboard" width="80%" />
+                    <p>Figure 1.3 - Employer Dahsboard</p>
+                    
+                    <h4><strong>Profile</strong></h4>
+                    <p>the profile button leads to the employer's profile. there the employer can view, edit, or delete information.
+                    </p>
+                    <br />
+                    <h4><strong>Jobs List</strong></h4>
+                    <p>the jobs list shows the list of jobs that have been posted.
+                    there, the emlployer can also create a new job, edit or delete a job, or view jobs.
+                    </p>
+                    <br />
+                    <h3>Option 2 - Students Page</h3>
+                    <p>the students page is accesible by clicking the Students link on the menu.</p>
+                    <p>The students page lists all the students registered. The employer can browse, search, or filter students by name or location.
+                    once the employer finds a student, clicking the details button will bring up the student's full profile page. there the employer can either go back to the list, 
+                    or click the contact student button. this will prompt the defualt email server to automatically fill out the student's email address for the employer to email to.
+                    </p>
+                    <p>NOTE: the employer must write the email and include the subject line. at this time we do not have a defualt email template.</p>
+                    <br />
+                    <h3>Option 3 - Maps</h3>
+                    <p>Clicking on the User Maps link in the menu, will bring up a google map template.</p>
+                    <p>there the employer can click and add a pin in their area for the job, and write a description and title of the job to make it easy for students to search by location.</p>
+                    <p>once the pin has been approved by an Administrator, it will be visible to all users.</p>
+                </div>
+            </div>
+        </div>
+
+
+</div>
+<br />
+<br />
+<p>If you have other questions or concerns regarding the functionality of Xyphos, please contact one of the administrators
+   by clicking on the contact administrator button on the menu, or click @Html.ActionLink("here", "Contact", "Home"). </p>

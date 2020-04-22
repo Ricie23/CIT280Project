@@ -25,5 +25,10 @@ namespace CIT280App.Controllers
 
             return View();
         }
+
+        public ActionResult Document()
+        {
+            return View();
+        }
     }
 }
