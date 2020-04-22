@@ -8,27 +8,92 @@ using System.Web;
 using System.Web.Mvc;
 using CIT280App.DAL;
 using CIT280App.Models;
+using PagedList;
 
 namespace CIT280App.Controllers
 {
-    [Authorize]
+   // [Authorize]
     public class EmployerModelController : Controller
     {
         private XyphosContext db = new XyphosContext();
 
         // GET: EmployerModels
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.Employers.ToList());
+            ViewBag.EmpNameSortParm = String.IsNullOrEmpty(sortOrder) ? "empname_desc" : "";
+            ViewBag.EmpTypeSortParm = sortOrder == "emptype" ? "emptype_desc" : "emptype";
+            ViewBag.CitySortParm = sortOrder == "city" ? "city_desc" : "city";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
+
+            var employers = from e in db.Employers
+                            select e;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                employers = employers.Where(e => e.BuisnessName.Contains(searchString)
+                                            || e.BuisnessType.Contains(searchString)
+                                            || e.City.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "city_desc":
+                    employers = employers.OrderByDescending(e => e.City);
+                    break;
+                case "city":
+                    employers = employers.OrderBy(e => e.City);
+                    break;
+                case "empname_desc":
+                    employers = employers.OrderByDescending(e => e.BuisnessName);
+                    break;
+                case "emptype":
+                    employers = employers.OrderBy(e => e.BuisnessType);
+                    break;
+                case "emptype_desc":
+                    employers = employers.OrderByDescending(e => e.BuisnessType);
+                    break;
+                default:
+                    employers = employers.OrderBy(e => e.BuisnessName);
+                    break; ;
+            }
+            int pageSize = 100;
+            int pageNumber = (page ?? 1);
+            return View(employers.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult EmployersDashboard() 
         {
             return View();
         }
+        public ActionResult Info()
+        {
+            return View();
+        }
 
         // GET: EmployerModels/Details/5
         public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                //CHANGE BACK BEFORE MASTER
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                id = 3;
+            }
+            EmployerModel employerModel = db.Employers.Find(id);
+            if (employerModel == null)
+            {
+                return HttpNotFound();
+            }
+            return View(employerModel);
+        }
+
+        public ActionResult Profile(int? id)
         {
             if (id == null)
             {
@@ -59,6 +124,7 @@ namespace CIT280App.Controllers
         {
             if (ModelState.IsValid)
             {
+                employerModel.Role = UserRole.Employer;
                 db.Employers.Add(employerModel);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -97,7 +163,7 @@ namespace CIT280App.Controllers
             }
             return View(employerModel);
         }
-
+  
         // GET: EmployerModels/Delete/5
         public ActionResult Delete(int? id)
         {

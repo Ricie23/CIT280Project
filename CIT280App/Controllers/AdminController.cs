@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CIT280App.DAL;
 using CIT280App.Models;
+using PagedList;
 
 namespace CIT280App.Controllers
 {
@@ -18,11 +19,69 @@ namespace CIT280App.Controllers
         private XyphosContext db = new XyphosContext();
 
         // GET: Admin
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.Admins.ToList());
+            ViewBag.RoleSortParm = String.IsNullOrEmpty(sortOrder) ? "role_desc" : "";
+            ViewBag.FirstNameSortParm = sortOrder == "firstname" ? "firstname_desc" : "firstname";
+            ViewBag.LastNameSortParm = sortOrder == "lastname" ? "lastname_desc" : "lastname";
+            ViewBag.CitySortParm = sortOrder == "city" ? "city_desc" : "city";
+
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
+
+            var user = from u in db.Admins
+                       select u;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                user = user.Where(u => u.LastName.Contains(searchString)
+                                        || u.City.Contains(searchString)
+                                        || u.FirstName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "city_desc":
+                    user = user.OrderByDescending(u => u.City);
+                    break;
+                case "city":
+                    user = user.OrderBy(u => u.City);
+                    break;
+                case "lastname_desc":
+                    user = user.OrderByDescending(u => u.LastName);
+                    break;
+                case "lastname":
+                    user = user.OrderBy(u => u.LastName);
+                    break;
+                case "firstname":
+                    user = user.OrderByDescending(u => u.FirstName);
+                    break;
+                case "firstname_desc":
+                    user = user.OrderByDescending(u => u.FirstName);
+                    break;
+                case "role_desc":
+                    user = user.OrderByDescending(u => u.Role);
+                    break;
+                default:
+                    user = user.OrderBy(u => u.Role);
+                    break;
+            }
+            int pageSize = 100;
+            int pageNumber = (page ?? 1);
+            return View(user.ToPagedList(pageNumber, pageSize));
         }
         public ActionResult AdminDashboard()
+        {
+            return View();
+        }
+
+        public ActionResult CreateUserDashboard()
         {
             return View();
         }
@@ -35,10 +94,60 @@ namespace CIT280App.Controllers
             return View(users);
         }
 
-        public ActionResult AllJobs() 
+        public ViewResult AllJobs(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            var jobs = db.Jobs.Include(j => j.User);
-            return View(jobs.ToList());
+            ViewBag.JobNameSortParm = String.IsNullOrEmpty(sortOrder) ? "jobname_desc" : "";
+            ViewBag.EmpNameSortParm = sortOrder == "empname" ? "empname_desc" : "empname";
+            ViewBag.CitySortParm = sortOrder == "city" ? "city_desc" : "city";
+            ViewBag.PaySortParm = sortOrder == "pay" ? "pay_desc" : "pay";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
+
+            var jobs = from j in db.Jobs
+                       select j;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                jobs = jobs.Where(j => j.Name.Contains(searchString)
+                                        || j.City.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "city_desc":
+                    jobs = jobs.OrderByDescending(j => j.City);
+                    break;
+                case "city":
+                    jobs = jobs.OrderBy(j => j.City);
+                    break;
+                case "jobname_desc":
+                    jobs = jobs.OrderByDescending(j => j.Name);
+                    break;
+                case "empname":
+                    jobs = jobs.OrderBy(j => j.Employer);
+                    break;
+                case "empname_desc":
+                    jobs = jobs.OrderByDescending(j => j.Employer);
+                    break;
+                case "pay":
+                    jobs = jobs.OrderBy(j => j.Pay);
+                    break;
+                case "pay_desc":
+                    jobs = jobs.OrderByDescending(j => j.Pay);
+                    break;
+                default:
+                    jobs = jobs.OrderBy(j => j.Name);
+                    break;
+            }
+            int pageSize = 100;
+            int pageNumber = (page ?? 1);
+            return View(jobs.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: JobsModel/Details/5
@@ -86,6 +195,7 @@ namespace CIT280App.Controllers
         {
             if (ModelState.IsValid)
             {
+                userModel.Role = UserRole.Admin;
                 db.Admins.Add(userModel);
                 db.SaveChanges();
                 return RedirectToAction("Index");

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CIT280App.DAL;
 using CIT280App.Models;
+using PagedList;
 
 namespace CIT280App.Controllers
 {
@@ -17,18 +18,83 @@ namespace CIT280App.Controllers
         private XyphosContext db = new XyphosContext();
 
         // GET: StudentModel
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.Students.ToList());
+            ViewBag.LastNameSortParm = String.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
+            ViewBag.FirstNameSortParm = sortOrder == "First Name" ? "firstname_desc" : "firstname";
+            ViewBag.CitySortParm = sortOrder == "City" ? "city_desc" : "city";
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
+
+            var students = from s in db.Students
+                           select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.LastName.Contains(searchString)
+                                            || s.FirstName.Contains(searchString)
+                                            || s.City.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "city_desc":
+                    students = students.OrderByDescending(s => s.City);
+                    break;
+                case "city":
+                    students = students.OrderBy(s => s.City);
+                    break;
+                case "lastname_desc":
+                    students = students.OrderByDescending(s => s.LastName);
+                    break;
+                case "firstname":
+                    students = students.OrderBy(s => s.FirstName);
+                    break;
+                case "firstname_desc":
+                    students = students.OrderByDescending(s => s.FirstName);
+                    break;
+                default:
+                    students = students.OrderBy(s => s.LastName);
+                    break; ;
+            }
+            int pageSize = 100;
+            int pageNumber = (page ?? 1);
+            return View(students.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult StudentDashboard()
+        public ActionResult StudentsDashboard()
+        {
+            return View();
+        }
+
+        public ActionResult Info()
         {
             return View();
         }
 
         // GET: StudentModel/Details/5
         public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                //CHANGE BACK BEFORE PUSH TO MASTER
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                id = 1;
+            }
+            StudentModel studentModel = db.Students.Find(id);
+            if (studentModel == null)
+            {
+                return HttpNotFound();
+            }
+            return View(studentModel);
+        }
+
+        public ActionResult Profile(int? id)
         {
             if (id == null)
             {
@@ -59,7 +125,8 @@ namespace CIT280App.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Admins.Add(studentModel);
+                studentModel.Role = UserRole.Student;
+                db.Students.Add(studentModel);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

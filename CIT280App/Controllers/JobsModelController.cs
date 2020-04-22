@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using CIT280App.DAL;
 using CIT280App.Models;
 using CIT280App.ViewModels;
+using PagedList;
 
 namespace CIT280App.Controllers
 {
@@ -18,10 +19,60 @@ namespace CIT280App.Controllers
         private XyphosContext db = new XyphosContext();
 
         // GET: JobsModel
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            var jobs = db.Jobs.Include(j => j.User);
-            return View(jobs.ToList());
+            ViewBag.JobNameSortParm = String.IsNullOrEmpty(sortOrder) ? "jobname_desc" : "";
+            ViewBag.EmpNameSortParm = sortOrder == "empname" ? "empname_desc" : "empname";
+            ViewBag.CitySortParm = sortOrder == "city" ? "city_desc" : "city";
+            ViewBag.PaySortParm = sortOrder == "pay" ? "pay_desc" : "pay";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
+
+            var jobs = from j in db.Jobs
+                       select j;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                jobs = jobs.Where(j => j.Name.Contains(searchString)
+                                        || j.City.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "city_desc":
+                    jobs = jobs.OrderByDescending(j => j.City);
+                    break;
+                case "city":
+                    jobs = jobs.OrderBy(j => j.City);
+                    break;
+                case "jobname_desc":
+                    jobs = jobs.OrderByDescending(j => j.Name);
+                    break;
+                case "empname":
+                    jobs = jobs.OrderBy(j => j.Employer);
+                    break;
+                case "empname_desc":
+                    jobs = jobs.OrderByDescending(j => j.Employer);
+                    break;
+                case "pay":
+                    jobs = jobs.OrderBy(j => j.Pay);
+                    break;
+                case "pay_desc":
+                    jobs = jobs.OrderByDescending(j => j.Pay);
+                    break;
+                default:
+                    jobs = jobs.OrderBy(j => j.Name);
+                    break;
+            }
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(jobs.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult EmployerJobList(int? id) 
@@ -59,10 +110,12 @@ namespace CIT280App.Controllers
             return View(jobsModel);
         }
 
+
         // GET: JobsModel/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
-            ViewBag.UserID = new SelectList(db.Admins, "ID", "FirstName");
+
+            ViewBag.UserID = id;
             return View();
         }
 
@@ -95,7 +148,7 @@ namespace CIT280App.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.UserID = new SelectList(db.Admins, "ID", "FirstName", jobsModel.UserID);
+            ViewBag.UserID = jobsModel.UserID;
             return View(jobsModel);
         }
 
@@ -108,11 +161,12 @@ namespace CIT280App.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 db.Entry(jobsModel).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("EmployerJobList");
             }
-            ViewBag.UserID = new SelectList(db.Admins, "ID", "FirstName", jobsModel.UserID);
+            ViewBag.UserID = new SelectList(db.Employers, "ID", "FirstName", jobsModel.UserID);
             return View(jobsModel);
         }
 

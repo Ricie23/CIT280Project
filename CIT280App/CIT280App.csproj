@@ -97,6 +97,12 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -381,9 +387,16 @@
     <Content Include="Views\Admin\JobDetails.cshtml" />
     <Content Include="Views\Admin\JobDelete.cshtml" />
     <Content Include="Views\EmployerModel\EmployersDashboard.cshtml" />
-    <Content Include="Views\EmployerModel\Profile.cshtml" />
     <Content Include="Views\JobsModel\EmployerJobList.cshtml" />
     <Content Include="Views\JobsModel\Edit.cshtml" />
+    <Content Include="Views\Admin\CreateUserDashboard.cshtml" />
+    <Content Include="Views\Account\UsersDashboard.cshtml" />
+    <Content Include="Views\EmployerModel\Profile.cshtml" />
+    <Content Include="Views\StudentModel\StudentsDashboard.cshtml" />
+    <Content Include="Views\StudentModel\Profile.cshtml" />
+    <Content Include="Views\JobsModel\Map.cshtml" />
+    <Content Include="Views\EmployerModel\Info.cshtml" />
+    <Content Include="Views\StudentModel\Info.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

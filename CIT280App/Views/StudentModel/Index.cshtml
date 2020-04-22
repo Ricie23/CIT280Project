@@ -9,53 +9,69 @@
 <p>
     @*@Html.ActionLink("Create New", "Create")*@
 </p>
+@using (Html.BeginForm("Index", "StudentModel", FormMethod.Get))
+{
+    <p>
+        Search by name: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+
+}
 <table class="table">
     <tr>
         @*<th>
-            @Html.DisplayNameFor(model => model.Role)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.City)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.State)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Phone)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProfilePic)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Reviews)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Major)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.School)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.YearInSchool)
-        </th>*@
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfilePic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reviews)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Major)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.School)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.YearInSchool)
+            </th>*@
 
         <th>
-            @Html.DisplayName("First Name")
+            @Html.ActionLink("First Name", "Index", new
+           {
+               sortOrder = ViewBag.FiratNameSortParm,
+          currentFilter = ViewBag.CurrentFilter
+           })
         </th>
         <th>
-            @Html.DisplayName("Last Name")
+            @Html.ActionLink("Last Name", "Index", new
+            {
+                sortOrder = ViewBag.LastNameSortParm,
+           currentFilter = ViewBag.CurrentFilter
+            })
         </th>
         <th>
             @Html.DisplayName("College")
@@ -64,7 +80,11 @@
             @Html.DisplayName("Major")
         </th>
         <th>
-            @Html.DisplayName("City")
+            @Html.ActionLink("City", "Index", new
+           {
+               sortOrder = ViewBag.CitySortParm,
+          currentFilter = ViewBag.CurrentFilter
+           })
         </th>
         <th>
             @Html.DisplayName("State")
@@ -72,54 +92,55 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.Role)
-        </td>*@
-        <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Major)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.School)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.City)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.State)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Phone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProfilePic)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Reviews)
-        </td>
-        
-        <td>
-            @Html.DisplayFor(modelItem => item.YearInSchool)
-        </td>*@
-        <td>
-            @*@Html.ActionLink("Edit", "Edit", new { id=item.ID }) |*@
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) @*|*@
-            @*@Html.ActionLink("Delete", "Delete", new { id=item.ID })*@
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Role)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Major)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.School)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProfilePic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reviews)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.YearInSchool)
+                </td>*@
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id=item.ID }) |*@
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) @*|*@
+                @*@Html.ActionLink("Delete", "Delete", new { id=item.ID })*@
+            </td>
+        </tr>
+    }
 
 </table>
