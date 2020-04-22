@@ -18,10 +18,6 @@ namespace CIT280App.Controllers
         private XyphosContext db = new XyphosContext();
 
         // GET: StudentModel
-        //public ActionResult Index()
-        //{
-        //    return View(db.Students.ToList());
-        //}
         public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.LastNameSortParm = String.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
@@ -43,7 +39,7 @@ namespace CIT280App.Controllers
             {
                 students = students.Where(s => s.LastName.Contains(searchString)
                                             || s.FirstName.Contains(searchString)
-                                            || s.City.Contains(searchString) );
+                                            || s.City.Contains(searchString));
             }
             switch (sortOrder)
             {
@@ -66,17 +62,34 @@ namespace CIT280App.Controllers
                     students = students.OrderBy(s => s.LastName);
                     break; ;
             }
-            int pageSize = 5;
+            int pageSize = 100;
             int pageNumber = (page ?? 1);
             return View(students.ToPagedList(pageNumber, pageSize));
         }
-        public ActionResult StudentDashboard()
+
+        public ActionResult StudentsDashboard()
         {
             return View();
         }
 
         // GET: StudentModel/Details/5
         public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                //CHANGE BACK BEFORE PUSH TO MASTER
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                id = 1;
+            }
+            StudentModel studentModel = db.Students.Find(id);
+            if (studentModel == null)
+            {
+                return HttpNotFound();
+            }
+            return View(studentModel);
+        }
+
+        public ActionResult Profile(int? id)
         {
             if (id == null)
             {
@@ -107,7 +120,8 @@ namespace CIT280App.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Admins.Add(studentModel);
+                studentModel.Role = UserRole.Student;
+                db.Students.Add(studentModel);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

@@ -2,21 +2,52 @@
 
 @{
     ViewBag.Title = "Profile";
-}
 
+    string EmailTo = Model.Email;
+
+    string FullName = Model.FirstName + Model.LastName;
+}
+<style>
+
+    a {
+        color: white;
+        text-decoration: none;
+    }
+
+        a:hover {
+            color: aliceblue;
+            text-decoration: none;
+        }
+</style>
 <h2 class="text-center jumbotron bg-info text-white">Profile</h2>
 
 <div>
-    <h4 class="text-center">EmployerModel</h4>
+    <h4 class="text-center">@FullName</h4>
     <hr />
     <dl class="dl-horizontal text-center">
         <dt>
-            @Html.DisplayNameFor(model => model.Role)
+            @Html.DisplayNameFor(model => model.BuisnessName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Role)
+            @Html.DisplayFor(model => model.BuisnessName)
         </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BuisnessType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BuisnessType)
+        </dd>
+
+        @*<dt>
+                @Html.DisplayNameFor(model => model.Role)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Role)
+            </dd>*@
 
         <dt>
             @Html.DisplayNameFor(model => model.FirstName)
@@ -74,41 +105,28 @@
             @Html.DisplayFor(model => model.Phone)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ProfilePic)
-        </dt>
+        @*<dt>
+                @Html.DisplayNameFor(model => model.ProfilePic)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ProfilePic)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.ProfilePic)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Reviews)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Reviews)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Reviews)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.BuisnessName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.BuisnessName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.BuisnessType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.BuisnessType)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Reviews)
+            </dd>*@
 
     </dl>
 </div>
 <p>
-    @*@Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |*@
-    @Html.ActionLink("Back to DashBoard", "EmplyerDashboard")
+    <a class="btn btn-lg btn-primary text-left" href="mailto:@EmailTo">Contact Employer</a>
+<p class="btn btn-lg btn-primary text-left">@Html.ActionLink("Edit", "Edit", new { id = Model.ID })</p>
+<br />
+<p class="btn btn-lg btn-primary text-left">@Html.ActionLink("Back to Dashboard", "EmployersDashboard")</p>
 </p>
+

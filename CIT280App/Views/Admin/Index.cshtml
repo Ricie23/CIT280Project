@@ -7,9 +7,9 @@
 <h2 class="text-center jumbotron bg-info text-white">All Jobs</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "CreateUserDashboard")
 </p>
-@using (Html.BeginForm("Index", "AdminModel", FormMethod.Get))
+@using (Html.BeginForm("Index", "UserModel", FormMethod.Get))
 {
     <p>
         Search by name: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
@@ -17,6 +17,7 @@
     </p>
 }
 <table class="table text-center">
+
     <tr>
         <th>
             @Html.ActionLink("User Type", "Index", new
@@ -66,7 +67,6 @@
             </th>*@
         <th></th>
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>

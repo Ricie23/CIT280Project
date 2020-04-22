@@ -11,10 +11,10 @@
 </p>
 @using (Html.BeginForm("Index", "StudentModel", FormMethod.Get))
 {
-<p>
-    Search by name: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-    <input type="submit" value="Search" />
-</p>
+    <p>
+        Search by name: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
 
 }
 <table class="table">

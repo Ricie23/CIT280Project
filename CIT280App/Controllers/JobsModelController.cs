@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CIT280App.DAL;
 using CIT280App.Models;
+using CIT280App.ViewModels;
 using PagedList;
 
 namespace CIT280App.Controllers
@@ -18,11 +19,6 @@ namespace CIT280App.Controllers
         private XyphosContext db = new XyphosContext();
 
         // GET: JobsModel
-        //public ActionResult Index()
-        //{
-        //    var jobs = db.Jobs.Include(j => j.User);
-        //    return View(jobs.ToList());
-        //}
         public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.JobNameSortParm = String.IsNullOrEmpty(sortOrder) ? "jobname_desc" : "";
@@ -41,7 +37,7 @@ namespace CIT280App.Controllers
             ViewBag.currentFilter = searchString;
 
             var jobs = from j in db.Jobs
-                            select j;
+                       select j;
             if (!String.IsNullOrEmpty(searchString))
             {
                 jobs = jobs.Where(j => j.Name.Contains(searchString)
@@ -72,11 +68,28 @@ namespace CIT280App.Controllers
                     break;
                 default:
                     jobs = jobs.OrderBy(j => j.Name);
-                    break; 
+                    break;
             }
             int pageSize = 5;
             int pageNumber = (page ?? 1);
             return View(jobs.ToPagedList(pageNumber, pageSize));
+        }
+
+        public ActionResult EmployerJobList(int? id) 
+        {
+
+            if (id == null)
+            {
+                //CHANGE BACK BEFORE MASTER
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                id = 6;              
+            }
+            UserModel Emp = db.Employers.Find(id);
+            ViewData["EmpID"] = Emp.ID;
+            var jobs = db.Jobs.Include(j => j.User);
+
+            return View(jobs.ToList());
+
         }
         public ActionResult Map()
         {
@@ -97,10 +110,12 @@ namespace CIT280App.Controllers
             return View(jobsModel);
         }
 
+
         // GET: JobsModel/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
-            ViewBag.UserID = new SelectList(db.Admins, "ID", "FirstName");
+
+            ViewBag.UserID = id;
             return View();
         }
 
@@ -122,7 +137,6 @@ namespace CIT280App.Controllers
             return View(jobsModel);
         }
 
-        // GET: JobsModel/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -134,7 +148,7 @@ namespace CIT280App.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.UserID = new SelectList(db.Admins, "ID", "FirstName", jobsModel.UserID);
+            ViewBag.UserID = jobsModel.UserID;
             return View(jobsModel);
         }
 
@@ -147,11 +161,12 @@ namespace CIT280App.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 db.Entry(jobsModel).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("EmployerJobList");
             }
-            ViewBag.UserID = new SelectList(db.Admins, "ID", "FirstName", jobsModel.UserID);
+            ViewBag.UserID = new SelectList(db.Employers, "ID", "FirstName", jobsModel.UserID);
             return View(jobsModel);
         }
 

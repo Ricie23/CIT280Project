@@ -1,256 +1,522 @@
-﻿@using CIT280App.DAL;
+﻿
+@{
+    ViewBag.Title = "Map";
+}
 
-<!DOCTYPE html>
-<!-- style template from http://getbootstrap.com/getting-started -->
-
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Google Maps Page</title>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvgS_IXsJO5zKd3QitvibgkWSy9VsBJqo"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvgS_IXsJO5zKd3QitvibgkWSy9VsBJqo&libraries=places"></script>
+<?php
+include_once 'header.php';
+include_once 'locations_model.php';
+?>
 
 
-    <style type="text/css">
+<div id="map"></div>
 
-        #map_canvas {
-            height: 400px;
+<!------ Include the above in your HEAD tag ---------->
+<script>
+    var map;
+    var marker;
+    var infowindow;
+    var red_icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+    var purple_icon = 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png';
+    var locations = <? php get_all_locations() ?>;
+
+    function initMap() {
+        var france = { lat: 46.87916, lng: -3.32910 };
+        infowindow = new google.maps.InfoWindow();
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: france,
+            zoom: 7
+        });
+
+
+        var i; var confirmed = 0;
+        for (i = 0; i < locations.length; i++) {
+
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                map: map,
+                icon: locations[i][4] === '1' ? red_icon : purple_icon,
+                html: document.getElementById('form')
+            });
+
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                return function () {
+                    confirmed = locations[i][4] === '1' ? 'checked' : 0;
+                    $("#confirmed").prop(confirmed, locations[i][4]);
+                    $("#id").val(locations[i][0]);
+                    $("#description").val(locations[i][3]);
+                    $("#form").show();
+                    infowindow.setContent(marker.html);
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
         }
+    }
+
+    function saveData() {
+        var confirmed = document.getElementById('confirmed').checked ? 1 : 0;
+        var id = document.getElementById('id').value;
+        var url = 'locations_model.php?confirm_location&id=' + id + '&confirmed=' + confirmed;
+        downloadUrl(url, function (data, responseCode) {
+            if (responseCode === 200 && data.length > 1) {
+                infowindow.close();
+                window.location.reload(true);
+            } else {
+                infowindow.setContent("<div style='color: purple; font-size: 25px;'>Inserting Errors</div>");
+            }
+        });
+    }
+
+
+    function downloadUrl(url, callback) {
+        var request = window.ActiveXObject ?
+            new ActiveXObject('Microsoft.XMLHTTP') :
+            new XMLHttpRequest;
+
+        request.onreadystatechange = function () {
+            if (request.readyState == 4) {
+                callback(request.responseText, request.status);
+            }
+        };
+
+        request.open('GET', url, true);
+        request.send(null);
+    }
+
+
+</script>
+
+<div style="display: none" id="form">
+    <table class="map1">
+        <tr>
+            <input name="id" type='hidden' id='id' />
+            <td><a>Description:</a></td>
+            <td><textarea disabled id='description' placeholder='Description'></textarea></td>
+        </tr>
+        <tr>
+            <td><b>Confirm Location ?:</b></td>
+            <td><input id='confirmed' type='checkbox' name='confirmed'></td>
+        </tr>
+
+        <tr><td></td><td><input type='button' value='Save' onclick='saveData()' /></td></tr>
+    </table>
+</div>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?language=en&key=AIzaSyDvgS_IXsJO5zKd3QitvibgkWSy9VsBJqo&callback=initMap">
+</script>
+
+<?php
+// Opens a connection to a MySQL server.
+$connection=mysqli_connect ('remotemysql.com','SMsCWv63w4', 'quXUF5iZZr','SMsCWv63w4');
+if (!$connection) {
+    die('Not connected : ' . mysqli_connect_error());
+}
+// Sets the active MySQL database.
+/*$db_selected = mysqli_select_db($connection,'accounts');
+if (!$db_selected) {
+    die ('Can\'t use db : ' . mysqli_error($connection));
+}*/
+?>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Xyphos Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+</head>
+<body>
+    <style>
+
         /* Optional: Makes the sample page fill the window. */
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
         }
-
-        #description {
-            font-family: Roboto;
-            font-size: 15px;
-            font-weight: 300;
-        }
-
-        #infowindow-content .title {
-            font-weight: bold;
-        }
-
-        #infowindow-content {
-            display: none;
-        }
-
-        #map #infowindow-content {
-            display: inline;
-        }
-
-        .pac-card {
-            margin: 10px 10px 0 0;
-            border-radius: 2px 0 0 2px;
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            outline: none;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-            background-color: #fff;
-            font-family: Roboto;
-        }
-
-        #pac-container {
-            padding-bottom: 12px;
-            margin-right: 12px;
-        }
-
-        .pac-controls {
-            display: inline-block;
-            padding: 5px 11px;
-        }
-
-            .pac-controls label {
-                font-family: Roboto;
-                font-size: 13px;
-                font-weight: 300;
-            }
-
-        #pac-input {
-            background-color: #fff;
-            font-family: Roboto;
-            font-size: 15px;
-            font-weight: 300;
-            margin-left: 12px;
-            padding: 0 11px 0 13px;
-            text-overflow: ellipsis;
-            width: 400px;
-        }
-
-            #pac-input:focus {
-                border-color: #4d90fe;
-            }
-
-        #title {
-            color: #fff;
-            background-color: #4d90fe;
-            font-size: 25px;
-            font-weight: 500;
-            padding: 6px 12px;
-        }
-
-        #target {
-            width: 345px;
+        /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+        #map {
+            height: 100%;
         }
     </style>
-</head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<body>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <?php
+    require("db.php");
 
+    // Gets data from URL parameters.
+    if(isset($_GET['add_location'])) {
+    add_location();
+    }
+    if(isset($_GET['confirm_location'])) {
+    confirm_location();
+    }
+
+
+
+    function add_location(){
+    $con=mysqli_connect ("localhost", 'root', '','demo');
+    if (!$con) {
+    die('Not connected : ' . mysqli_connect_error());
+    }
+    $lat = $_GET['lat'];
+    $lng = $_GET['lng'];
+    $description =$_GET['description'];
+    // Inserts new row with place data.
+    $query = sprintf("INSERT INTO locations " .
+    " (id, lat, lng, description) " .
+    " VALUES (NULL, '%s', '%s', '%s');",
+    mysqli_real_escape_string($con,$lat),
+    mysqli_real_escape_string($con,$lng),
+    mysqli_real_escape_string($con,$description));
+
+    $result = mysqli_query($con,$query);
+    echo"Inserted Successfully";
+    if (!$result) {
+    die('Invalid query: ' . mysqli_error($con));
+    }
+    }
+    function confirm_location(){
+    $con=mysqli_connect ("localhost", 'root', '','demo');
+    if (!$con) {
+    die('Not connected : ' . mysqli_connect_error());
+    }
+    $id =$_GET['id'];
+    $confirmed =$_GET['confirmed'];
+    // update location with confirm if admin confirm.
+    $query = "update locations set location_status = $confirmed WHERE id = $id ";
+    $result = mysqli_query($con,$query);
+    echo "Inserted Successfully";
+    if (!$result) {
+    die('Invalid query: ' . mysqli_error($con));
+    }
+    }
+    function get_confirmed_locations(){
+    $con=mysqli_connect ("localhost", 'root', '','demo');
+    if (!$con) {
+    die('Not connected : ' . mysqli_connect_error());
+    }
+    // update location with location_status if admin location_status.
+    $sqldata = mysqli_query($con,"
+    select id ,lat,lng,description,location_status as isconfirmed
+    from locations WHERE  location_status = 1
+    ");
+
+    $rows = array();
+
+    while($r = mysqli_fetch_assoc($sqldata)) {
+    $rows[] = $r;
+
+    }
+
+    $indexed = array_map('array_values', $rows);
+    //  $array = array_filter($indexed);
+
+    echo json_encode($indexed);
+    if (!$rows) {
+    return null;
+    }
+    }
+    function get_all_locations(){
+    $con=mysqli_connect ("localhost", 'root', '','demo');
+    if (!$con) {
+    die('Not connected : ' . mysqli_connect_error());
+    }
+    // update location with location_status if admin location_status.
+    $sqldata = mysqli_query($con,"
+    select id ,lat,lng,description,location_status as isconfirmed
+    from locations
+    ");
+
+    $rows = array();
+    while($r = mysqli_fetch_assoc($sqldata)) {
+    $rows[] = $r;
+
+    }
+    $indexed = array_map('array_values', $rows);
+    //  $array = array_filter($indexed);
+
+    echo json_encode($indexed);
+    if (!$rows) {
+    return null;
+    }
+    }
+    function array_flatten($array) {
+    if (!is_array($array)) {
+    return FALSE;
+    }
+    $result = array();
+    foreach ($array as $key => $value) {
+    if (is_array($value)) {
+    $result = array_merge($result, array_flatten($value));
+    }
+    else {
+    $result[$key] = $value;
+    }
+    }
+    return $result;
+    }
+
+    ?><?php
+    include_once 'header.php';
+    include 'locations_model.php';
+    //get_unconfirmed_locations();exit;
+    ?>
+
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?language=en&key=AIzaSyDvgS_IXsJO5zKd3QitvibgkWSy9VsBJqo">
+    </script>
+
+    <div id="map"></div>
     <script>
-    var cities = @Html.Raw(Json.Encode(Model));
-	//console.log(cities);
-        var lat = -27;
-        var long = 140;
-        var uluru = { lat: -25.363, lng: 131.044 };
-        var obama = { lat: -28.5, lng: 145.044 };
-        var test = { lat: lat, lng: long };
+        /**
+         * Create new map
+         */
+        var infowindow;
+        var map;
+        var red_icon =  'http://maps.google.com/mapfiles/ms/icons/red-dot.png' ;
+        var purple_icon =  'http://maps.google.com/mapfiles/ms/icons/purple-dot.png' ;
+        var locations = <?php get_confirmed_locations() ?>;
+        var myOptions = {
+            zoom: 7,
+            center: new google.maps.LatLng(46.87916, -3.32910),
+            mapTypeId: 'roadmap'
+        };
+        map = new google.maps.Map(document.getElementById('map'), myOptions);
 
-        var contentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      '</div>'+
-      '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-      '<div id="bodyContent">'+
-      '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-      'sandstone rock formation in the southern part of the '+
-      'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-      'south west of the nearest large town, Alice Springs; 450&#160;km '+
-      '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-      'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-      'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-      'Aboriginal people of the area. It has many springs, waterholes, '+
-      'rock caves and ancient paintings. Uluru is listed as a World '+
-      'Heritage Site.</p>'+
-      '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-      'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-      '(last visited June 22, 2009).</p>'+
-      '</div>'+
-      '</div>';
+        /**
+         * Global marker object that holds all markers.
+         * @type {Object.<string, google.maps.LatLng>}
+         */
+        var markers = {};
 
-    $(document).ready(function() {
-        // execute
-        (function() {
-            // map options
-            var options = {
-                zoom: 5,
-                center: new google.maps.LatLng(uluru),
-                mapTypeId: google.maps.MapTypeId.TERRAIN,
-                mapTypeControl: true
-            };
+        /**
+         * Concatenates given lat and lng with an underscore and returns it.
+         * This id will be used as a key of marker to cache the marker in markers object.
+         * @param {!number} lat Latitude.
+         * @param {!number} lng Longitude.
+         * @return {string} Concatenated marker id.
+         */
+        var getMarkerUniqueId= function(lat, lng) {
+            return lat + '_' + lng;
+        };
 
-            // init map
-            var map = new google.maps.Map(document.getElementById('map_canvas'), options);
-            var infowindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-            //marker 1 and 2 need to create a for loop
+        /**
+         * Creates an instance of google.maps.LatLng by given lat and lng values and returns it.
+         * This function can be useful for getting new coordinates quickly.
+         * @param {!number} lat Latitude.
+         * @param {!number} lng Longitude.
+         * @return {google.maps.LatLng} An instance of google.maps.LatLng object
+         */
+        var getLatLng = function(lat, lng) {
+            return new google.maps.LatLng(lat, lng);
+        };
+
+        /**
+         * Binds click event to given map and invokes a callback that appends a new marker to clicked location.
+         */
+        var addMarker = google.maps.event.addListener(map, 'click', function(e) {
+            var lat = e.latLng.lat(); // lat of clicked point
+            var lng = e.latLng.lng(); // lng of clicked point
+            var markerId = getMarkerUniqueId(lat, lng); // an that will be used to cache this marker in markers object.
             var marker = new google.maps.Marker({
-                position: uluru,
+                position: getLatLng(lat, lng),
                 map: map,
-                title: 'Uluru (Ayers Rock)'
+                animation: google.maps.Animation.DROP,
+                id: 'marker_' + markerId,
+                html: "    <div id='info_"+markerId+"'>\n" +
+                "        <table class=\"map1\">\n" +
+                "            <tr>\n" +
+                "                <td><a>Description:</a></td>\n" +
+                "                <td><textarea  id='manual_description' placeholder='Description'></textarea></td></tr>\n" +
+                "            <tr><td></td><td><input type='button' value='Save' onclick='saveData("+lat+","+lng+")'/></td></tr>\n" +
+                "        </table>\n" +
+                "    </div>"
             });
-             var marker2 = new google.maps.Marker({
-                position: obama,
-                map: map,
-                title: 'Joe MOMA'
-             });
-            var marker3 = new google.maps.Marker({
-                position: test,
-                map: map,
-                title: 's MOMA'
-             });
-            //marker click fucntion
-            marker.addListener('click', function () {
-                infowindow.open(map, marker);
-
-            });
-            //input from the search box
-            var input = document.getElementById('pac-input');
-        var searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-        // Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed', function() {
-          searchBox.setBounds(map.getBounds());
+            markers[markerId] = marker; // cache marker in markers object
+            bindMarkerEvents(marker); // bind right click event to marker
+            bindMarkerinfo(marker); // bind infowindow with click event to marker
         });
 
-        var markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
-            searchBox.addListener('places_changed', function () {
-                var places = searchBox.getPlaces();
+        /**
+         * Binds  click event to given marker and invokes a callback function that will remove the marker from map.
+         * @param {!google.maps.Marker} marker A google.maps.Marker instance that the handler will binded.
+         */
+        var bindMarkerinfo = function(marker) {
+            google.maps.event.addListener(marker, "click", function (point) {
+                var markerId = getMarkerUniqueId(point.latLng.lat(), point.latLng.lng()); // get marker id by using clicked point's coordinate
+                var marker = markers[markerId]; // find marker
+                infowindow = new google.maps.InfoWindow();
+                infowindow.setContent(marker.html);
+                infowindow.open(map, marker);
+                // removeMarker(marker, markerId); // remove it
+            });
+        };
 
-                if (places.length == 0) {
-                    return;
-                }
+        /**
+         * Binds right click event to given marker and invokes a callback function that will remove the marker from map.
+         * @param {!google.maps.Marker} marker A google.maps.Marker instance that the handler will binded.
+         */
+        var bindMarkerEvents = function(marker) {
+            google.maps.event.addListener(marker, "rightclick", function (point) {
+                var markerId = getMarkerUniqueId(point.latLng.lat(), point.latLng.lng()); // get marker id by using clicked point's coordinate
+                var marker = markers[markerId]; // find marker
+                removeMarker(marker, markerId); // remove it
+            });
+        };
 
-                // Clear out the old markers.
-                markers.forEach(function (marker) {
-                    marker.setMap(null);
-                });
-                markers = [];
+        /**
+         * Removes given marker from map.
+         * @param {!google.maps.Marker} marker A google.maps.Marker instance that will be removed.
+         * @param {!string} markerId Id of marker.
+         */
+        var removeMarker = function(marker, markerId) {
+            marker.setMap(null); // set markers setMap to null to remove it from map
+            delete markers[markerId]; // delete marker instance from markers object
+        };
 
-                // For each place, get the icon, name and location.
-                var bounds = new google.maps.LatLngBounds();
-                places.forEach(function (place) {
-                    if (!place.geometry) {
-                        console.log("Returned place contains no geometry");
-                        return;
-                    }
-                    var icon = {
-                        url: place.icon,
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    };
 
-                    // Create a marker for each place.
-                    markers.push(new google.maps.Marker({
-                        map: map,
-                        icon: icon,
-                        title: place.name,
-                        position: place.geometry.location
-                    }));
-
-                    if (place.geometry.viewport) {
-                        // Only geocodes have viewport.
-                        bounds.union(place.geometry.viewport);
-                    } else {
-                        bounds.extend(place.geometry.location);
-                    }
-                });
-                map.fitBounds(bounds);
+        /**
+         * loop through (Mysql) dynamic locations to add markers to map.
+         */
+        var i ; var confirmed = 0;
+        for (i = 0; i < locations.length; i++) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                map: map,
+                icon :   locations[i][4] === '1' ?  red_icon  : purple_icon,
+                html: "<div>\n" +
+                "<table class=\"map1\">\n" +
+                "<tr>\n" +
+                "<td><a>Description:</a></td>\n" +
+                "<td><textarea disabled id='manual_description' placeholder='Description'>"+locations[i][3]+"</textarea></td></tr>\n" +
+                "</table>\n" +
+                "</div>"
             });
 
-            for (var i = 0; i < cities.length; i++) {
-                // init markers
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(cities[i].Lat, cities[i].Lng),
-                    map: map,
-                    title: cities[i].Title
-                });
-                map.addListener('click', function (e) {
-                    console.log(e);
-                    addMarker(e.latLng);
-                });
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                    infowindow = new google.maps.InfoWindow();
+                    confirmed =  locations[i][4] === '1' ?  'checked'  :  0;
+                    $("#confirmed").prop(confirmed,locations[i][4]);
+                    $("#id").val(locations[i][0]);
+                    $("#description").val(locations[i][3]);
+                    $("#form").show();
+                    infowindow.setContent(marker.html);
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
+        }
 
+        /**
+         * SAVE save marker from map.
+         * @param lat  A latitude of marker.
+         * @param lng A longitude of marker.
+         */
+        function saveData(lat,lng) {
+            var description = document.getElementById('manual_description').value;
+            var url = 'locations_model.php?add_location&description=' + description + '&lat=' + lat + '&lng=' + lng;
+            downloadUrl(url, function(data, responseCode) {
+                if (responseCode === 200  && data.length > 1) {
+                    var markerId = getMarkerUniqueId(lat,lng); // get marker id by using clicked point's coordinate
+                    var manual_marker = markers[markerId]; // find marker
+                    manual_marker.setIcon(purple_icon);
+                    infowindow.close();
+                    infowindow.setContent("<div style=' color: purple; font-size: 25px;'> Waiting for admin confirm!!</div>");
+                    infowindow.open(map, manual_marker);
 
-            }
+                }else{
+                    console.log(responseCode);
+                    console.log(data);
+                    infowindow.setContent("<div style='color: red; font-size: 25px;'>Inserting Errors</div>");
+                }
+            });
+        }
 
+        function downloadUrl(url, callback) {
+            var request = window.ActiveXObject ?
+                new ActiveXObject('Microsoft.XMLHTTP') :
+                new XMLHttpRequest;
 
-        })();
-    });
+            request.onreadystatechange = function() {
+                if (request.readyState == 4) {
+                    callback(request.responseText, request.status);
+                }
+            };
+
+            request.open('GET', url, true);
+            request.send(null);
+        }
+
 
     </script>
 
-    <div id="map_canvas"></div>
-</body>
-</html>
+
+
+
+
+    <?php
+    include_once 'footer.php';
+
+    ?>
+    -- phpMyAdmin SQL Dump
+    -- version 4.5.1
+    -- http://www.phpmyadmin.net
+    --
+    -- Host: 127.0.0.1
+    -- Generation Time: Apr 11, 2018 at 11:58 PM
+    -- Server version: 10.1.19-MariaDB
+    -- PHP Version: 5.6.28
+
+    SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+    SET time_zone = "+00:00";
+
+
+    /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+    /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+    /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+    /*!40101 SET NAMES utf8mb4 */;
+
+    --
+    -- Database: `demo`
+    --
+
+    -- --------------------------------------------------------
+
+    --
+    -- Table structure for table `locations`
+    --
+
+    CREATE TABLE `locations` (
+    `id` int(11) NOT NULL,
+    `lat` float(10,6) NOT NULL,
+    `lng` float(10,6) NOT NULL,
+    `description` varchar(200) NOT NULL,
+    `location_status` tinyint(1) DEFAULT '0'
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+    --
+    -- Indexes for dumped tables
+    --
+
+    --
+    -- Indexes for table `locations`
+    --
+    ALTER TABLE `locations`
+    ADD PRIMARY KEY (`id`);
+
+    --
+    -- AUTO_INCREMENT for dumped tables
+    --
+
+    --
+    -- AUTO_INCREMENT for table `locations`
+    --
+    ALTER TABLE `locations`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+    /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+    /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+    /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
