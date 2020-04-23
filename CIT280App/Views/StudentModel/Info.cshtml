@@ -2,6 +2,18 @@
 @{
     ViewBag.Title = "Info";
 }
+    <style>
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+            a:hover {
+                color: aliceblue;
+                text-decoration: none;
+            }
+    </style>
 <div class="text-center jumbotron bg-info text-white">
     <h1>Info about the Student Dashboard</h1>
 </div>
@@ -16,3 +28,5 @@
         <p>When clicked the profile button will take the student to their profile. While looking at the student profile the student can edit their profile.</p>
     </div>
 </div>
+
+<p class="btn btn-lg btn-primary text-left">@Html.ActionLink("Back to Dashboard", "StudentsDashboard")</p>
