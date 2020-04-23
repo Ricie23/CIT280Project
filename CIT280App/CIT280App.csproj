@@ -209,6 +209,10 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\Figure1_1.png" />
+    <Content Include="Content\images\Figure1_2.png" />
+    <Content Include="Content\images\Figure1_3.png" />
+    <Content Include="Content\images\Figure1_4.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -395,9 +399,7 @@
     <Content Include="Views\StudentModel\StudentsDashboard.cshtml" />
     <Content Include="Views\StudentModel\Profile.cshtml" />
     <Content Include="Views\JobsModel\Map.cshtml" />
-    <Content Include="Views\EmployerModel\Info.cshtml" />
-    <Content Include="Views\StudentModel\Info.cshtml" />
-    <Content Include="Views\JobsModel\Profile.cshtml" />
+    <Content Include="Views\Home\Document.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
