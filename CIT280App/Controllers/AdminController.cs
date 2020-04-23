@@ -204,6 +204,32 @@ namespace CIT280App.Controllers
             return View(userModel);
         }
 
+        // Job Create
+
+        public ActionResult JobCreate()
+        {
+            ViewBag.UserID = new SelectList(db.Employers, "ID", "FirstName");
+            return View();
+        }
+
+        // POST: JobsModel/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult JobCreate([Bind(Include = "ID,UserID,Name,Description,City,State,RequiredSkills,Photo,Pay,IsComplete")] JobsModel jobsModel)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Jobs.Add(jobsModel);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.UserID = new SelectList(db.Employers, "ID", "FirstName", jobsModel.UserID);
+            return View(jobsModel);
+        }
+
         // GET: JobsModel/Edit/5
         public ActionResult JobEdit(int? id)
         {

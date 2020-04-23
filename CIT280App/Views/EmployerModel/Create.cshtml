@@ -11,7 +11,7 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>EmployerModel</h4>
+        <h4>New Profile</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @*<div class="form-group">
@@ -127,5 +127,5 @@
 }
 
 <div>
-    @Html.ActionLink("Back to Dashboard", "EmployersDashboard")
+    @Html.ActionLink("Back to Home", "Index", "Home")
 </div>

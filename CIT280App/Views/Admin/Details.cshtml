@@ -2,12 +2,14 @@
 
 @{
     ViewBag.Title = "Details";
+
+    string FullName = Model.FirstName + " " + Model.LastName;
 }
 
-<h2>Details</h2>
+<h2 class="text-center jumbotron bg-info text-white">Details</h2>
 
 <div>
-    <h4>UserModel</h4>
+    <h4>@FullName</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>

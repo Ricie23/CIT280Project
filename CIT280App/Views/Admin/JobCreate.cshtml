@@ -1,27 +1,23 @@
 ﻿@model CIT280App.Models.JobsModel
 
 @{
-    ViewBag.Title = "JobEdit";
-
-    string JobName = Model.Name;
+    ViewBag.Title = "JobCreate";
 }
 
-<h2 class="text-center jumbotron bg-info text-white">Job Edit</h2>
+<h2 class="text-center jumbotron bg-info text-white">Create</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-
+    
     <div class="form-horizontal">
-        <h4>@JobName</h4>
+        <h4>New Job</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
-
         <div class="form-group">
-            @Html.LabelFor(model => model.UserID, "UserID", htmlAttributes: new { @class = "control-label col-md-2"} )
+            @Html.LabelFor(model => model.UserID, "UserID", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBox("UserID", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                @Html.DropDownList("UserID", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.UserID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -67,12 +63,12 @@
         </div>
 
         @*<div class="form-group">
-                @Html.LabelFor(model => model.Photo, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Photo, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Photo, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
+            @Html.LabelFor(model => model.Photo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Photo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Photo, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Pay, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -94,12 +90,12 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "EmployerJobList")
+    @Html.ActionLink("Back to List", "AllJobs")
 </div>

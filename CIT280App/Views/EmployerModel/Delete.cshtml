@@ -2,13 +2,15 @@
 
 @{
     ViewBag.Title = "Delete";
+
+    string FullName = Model.FirstName + " " + Model.LastName;
 }
 
 <h2 class="text-center jumbotron bg-info text-white">Delete</h2>
 
 <h3 class="text-center">Are you sure you want to delete this?</h3>
 <div>
-    <h4 class="text-center">EmployerModel</h4>
+    <h4 class="text-center">@FullName</h4>
     <hr />
     <dl class="dl-horizontal text-center">
         <dt>
